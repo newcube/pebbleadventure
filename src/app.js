@@ -3,15 +3,96 @@
 
 var UI = require('ui');
 var ajax = require('ajax');
+var Settings = require('settings');
+
+//game variables
 var storyList;
 var story;
+var currentChapter;
 var windowStack = [];
+var inventory = [];
+
+var showSplash = function(splashText){
+  var splash = new UI.Card({
+    title:splashText,
+    body:''
+  });
+  console.log('showing splash');
+  splash.show();
+  setTimeout(function(){ splash.hide(); }, 2000);
+};
+
+var saveGame = function(){
+  var gameFile = {};
+  gameFile.gameID = story.id;
+  gameFile.inventory = inventory;
+  gameFile.chapter = currentChapter;
+  gameFile.gamefile = story.gamefile;
+  
+  console.log('story.gamefile = ' + story.gamefile);
+  
+  console.log('setting gameFile : ' + JSON.stringify(gameFile));
+  Settings.data('saveGame', gameFile);
+  
+  showSplash('Game saved');
+  
+};
 
 var collectWindows = function(){
     var windowCount = windowStack.length;
     for(var e=0; e<windowCount; e++)
       windowStack[e].hide();
 };
+
+var showBackButtonMenu = function(chapterID){
+    //create menu with current chapter's options
+    var menu = new UI.Menu({
+      sections: [{
+        items: [
+          {
+            id: 0,
+            title: 'Save',
+            subtitle: 'Save and continue'
+          },
+          {
+            id: 1,
+            title: 'Save and Quit',
+            subtitle: 'Save and quit to menu'
+          },
+          {
+            id: 2,
+            title: 'Quit',
+            subtitle: 'Quit to menu'
+          }
+        ]
+      }]
+    });
+  
+    menu.on('select', function(e) {
+      
+      console.log('menu item id : ' + e.item.id);
+      
+         switch(e.item.id){
+           case 0:
+              saveGame();
+              this.hide();
+            break;
+           case 1:
+             saveGame();
+             windowStack.push(this); // collect all the windows to the root (title screen)
+             collectWindows();
+            break;
+          case 2:
+             windowStack.push(this); // collect all the windows to the root (title screen)
+             collectWindows();
+             break;
+         }
+    });
+  
+    menu.show();
+};
+
+
 
 var getChapterByID = function(chapterID){
    //get the current chapter by id
@@ -28,6 +109,9 @@ var createChapterCard = function(chapterID){
   var chapter = getChapterByID(chapterID);
   var cardBody = chapter.text;
   
+  if ( chapter.item )
+    cardBody += ' \n\nYou picked up ' + chapter.item + '!';
+  
   if ( chapter.isEnd )
     cardBody += ' \n\nPress Back to try again!';
   else
@@ -43,6 +127,7 @@ var createChapterCard = function(chapterID){
   
   card.on('click','back',function(){
     
+    /*
     var quitScreen = new UI.Card({
       title: 'Quit?',
       body: 'Press Select to quit, back to continue the adventure...'
@@ -54,6 +139,8 @@ var createChapterCard = function(chapterID){
     });
   
     quitScreen.show();
+    */
+    showBackButtonMenu();
     
   });
   
@@ -62,7 +149,7 @@ var createChapterCard = function(chapterID){
   return card;
 };
 
-var getMenuOptions = function(currentID){
+var getChapterMenuOptions = function(currentID){
   
   console.log('chapter id for menu options = ' + currentID);
   
@@ -72,11 +159,34 @@ var getMenuOptions = function(currentID){
   var options = [];
   
   for(var e=0; e<currentChapter.options.length; e++){
-    options.push({
-      title: 'Option ' + (e+1),
-      subtitle: currentChapter.options[e].text,
-      goto:currentChapter.options[e].goto
-    });
+    
+    var option = currentChapter.options[e];
+    
+    var addOption = true;
+    
+    if ( option.with )
+    {
+      var inventoryMatch = inventory.filter(function(item){return item==option.with;});
+      if (inventoryMatch.length===0) // player does not has item
+        addOption = false;
+        
+    }
+    
+    if ( option.without )
+    {
+      var inventoryMatch = inventory.filter(function(item){return item==option.without;});
+       if (inventoryMatch.length>0) // player has item
+        addOption = false;
+        
+    }
+    
+    if ( addOption ){
+      options.push({
+        title: 'Option ' + (e+1),
+        subtitle: option.text,
+        goto: option.goto
+      });
+    }
   }
   
   return options;
@@ -87,9 +197,19 @@ var gotoChapter = function(chapterID){
   
   collectWindows();
   
-  var chapterCard = createChapterCard(chapterID);
+  currentChapter = chapterID;
   
   var chapter = getChapterByID(chapterID);
+  
+  var chapterCard = createChapterCard(chapterID);
+  
+  //test for chapter item
+  if (chapter.item){
+    inventory.push(chapter.item);  // add to inventory
+    chapter.item = undefined; // remove from room
+  }
+  
+  currentChapter = chapterID;
   
   chapterCard.show();
   
@@ -97,7 +217,7 @@ var gotoChapter = function(chapterID){
   if (!chapter.isEnd){
     chapterCard.on('click', 'select', function(e) {
       
-      var items = getMenuOptions(chapterID);
+      var items = getChapterMenuOptions(chapterID);
       
       //create menu with current chapter's options
       var menu = new UI.Menu({
@@ -118,8 +238,25 @@ var gotoChapter = function(chapterID){
   }
 };
 
-var loadAdventure = function(gamefile){
- 
+var stripSavedInventoryFromStory = function(){
+  //if a saved game has in inventory item, we need to remove that item from the chapter it was found in
+  
+  console.log('strip inventory from story');
+  
+  for (var c=0; c<story.chapters.length; c++){
+    for(var i=0; i<inventory.length; i++)
+      if ( inventory[i] == story.chapters[c].item )
+        story.chapters[c].item = undefined;
+  }
+};
+
+var loadAdventure = function(gamefile, startingChapter, startingInventory){
+  
+  console.log('loading adventure with starting chapter : ' + startingChapter);
+  console.log('loading adventure with starting inventory : ' + startingInventory);
+  
+   
+  
     ajax(
     {
       url: 'http://www.web-gear.net/Adventure/Stories/' + gamefile + '.json',
@@ -127,9 +264,13 @@ var loadAdventure = function(gamefile){
     },
     function(data, status, request) {
       story = data;
-      gotoChapter(0);
+      
+      inventory = startingInventory;
+      
+      stripSavedInventoryFromStory();
+      
+      gotoChapter(startingChapter);
     });
-
 };
 
 var startGame = function(){
@@ -145,6 +286,20 @@ main.show();
 main.on('click', 'select', function(e) {
   //gotoChapter(0);
   var items = [];
+  
+  var saveGame = Settings.data('saveGame');
+  
+  console.log('getting save game : ' + JSON.stringify(saveGame));
+  
+  if (saveGame){
+     items.push({
+        title: 'Resume Game',
+        subtitle: 'Continue the Adventure',
+       resume: true
+     });
+  } 
+  
+  
   for(var y=0; y<storyList.stories.length; y++){
       items.push({
         title: 'Game ' + (y+1),
@@ -163,9 +318,12 @@ main.on('click', 'select', function(e) {
        
       //on click, set current chapter
       menu.on('select', function(e) {
-         console.log('starting game ' + e.item.gamefile);
-        //get game via ajax and on success, go to chapter 0 of global 'story' object
-        loadAdventure(e.item.gamefile);
+        if ( e.item.resume ){
+          inventory = saveGame.inventory;
+          loadAdventure(saveGame.gamefile, saveGame.chapter, saveGame.inventory);
+        }
+        else
+          loadAdventure(e.item.gamefile, 0, []);
       });
       
       windowStack.push(menu);
