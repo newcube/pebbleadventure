@@ -44,6 +44,27 @@ var collectWindows = function(){
       windowStack[e].hide();
 };
 
+var displayInventory = function(){
+ 
+  var bodyText = '';
+  
+  if ( inventory.length === 0 )
+    bodyText = '\nNothing!';
+  else
+  {
+    for(var e=0;e<inventory.length;e++){
+      bodyText += '-' + inventory[e] + '\n';
+    }
+  } 
+  
+  var card = new UI.Card({
+      subtitle: 'You\'re carrying:',
+      body: bodyText,
+      scrollable: true
+    });
+    card.show();
+};
+
 var showBackButtonMenu = function(chapterID){
     //create menu with current chapter's options
     var menu = new UI.Menu({
@@ -63,6 +84,11 @@ var showBackButtonMenu = function(chapterID){
             id: 2,
             title: 'Quit',
             subtitle: 'Quit to menu'
+          },
+          {
+            id: 3,
+            title: 'Inventory',
+            subtitle: 'Show inventory'
           }
         ]
       }]
@@ -86,13 +112,14 @@ var showBackButtonMenu = function(chapterID){
              windowStack.push(this); // collect all the windows to the root (title screen)
              collectWindows();
              break;
+          case 3:
+            displayInventory();
+             break;
          }
     });
   
     menu.show();
 };
-
-
 
 var getChapterByID = function(chapterID){
    //get the current chapter by id
@@ -126,22 +153,7 @@ var createChapterCard = function(chapterID){
   });
   
   card.on('click','back',function(){
-    
-    /*
-    var quitScreen = new UI.Card({
-      title: 'Quit?',
-      body: 'Press Select to quit, back to continue the adventure...'
-    });
-    
-    quitScreen.on('click','select', function(){
-      windowStack.push(this);
-      collectWindows();
-    });
-  
-    quitScreen.show();
-    */
     showBackButtonMenu();
-    
   });
   
   windowStack.push(card);
@@ -252,11 +264,7 @@ var stripSavedInventoryFromStory = function(){
 
 var loadAdventure = function(gamefile, startingChapter, startingInventory){
   
-  console.log('loading adventure with starting chapter : ' + startingChapter);
-  console.log('loading adventure with starting inventory : ' + startingInventory);
-  
-   
-  
+ 
     ajax(
     {
       url: 'http://www.web-gear.net/Adventure/Stories/' + gamefile + '.json',
@@ -274,13 +282,12 @@ var loadAdventure = function(gamefile, startingChapter, startingInventory){
 };
 
 var startGame = function(){
-
+  
 //main window
 var main = new UI.Card({
-  subtitle: 'Welcome to Adventure!',
-  body: 'Press Select to choose a game',
-  subtitleColor: 'indigo', // Named colors
-  bodyColor: '#9a0036' // Hex colors
+  title: ' Adventure',
+  body: '\nPress Select to Begin Your Adventure!',
+  icon: 'images/adventure.png'
 });
 main.show();
 main.on('click', 'select', function(e) {
@@ -302,7 +309,7 @@ main.on('click', 'select', function(e) {
   
   for(var y=0; y<storyList.stories.length; y++){
       items.push({
-        title: 'Game ' + (y+1),
+        title: 'Adventure ' + (y+1),
         subtitle: storyList.stories[y].title,
         gamefile: storyList.stories[y].gamefile
       });
