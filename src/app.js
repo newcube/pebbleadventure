@@ -12,6 +12,8 @@ var currentChapter;
 var windowStack = [];
 var inventory = [];
 
+var showEndMenu;
+
 var showSplash = function(splashText){
   var splash = new UI.Card({
     title:splashText,
@@ -42,6 +44,8 @@ var collectWindows = function(){
     var windowCount = windowStack.length;
     for(var e=0; e<windowCount; e++)
       windowStack[e].hide();
+  
+  windowStack = [];
 };
 
 var displayInventory = function(){
@@ -155,7 +159,10 @@ var createChapterCard = function(chapterID){
   });
   
   card.on('click','back',function(){
-    showBackButtonMenu();
+    if ( chapter.isEnd )
+      showEndMenu();
+    else   
+      showBackButtonMenu();
   });
   
   windowStack.push(card);
@@ -172,6 +179,8 @@ var getChapterMenuOptions = function(currentID){
   //create a menu option list from the goto options defined in the chapter
   var options = [];
   
+  var hasInInventory = function(item){return inventory.indexOf(item) > -1;}; 
+  
   for(var e=0; e<currentChapter.options.length; e++){
     
     var option = currentChapter.options[e];
@@ -180,16 +189,13 @@ var getChapterMenuOptions = function(currentID){
     
     if ( option.with )
     {
-      var inventoryMatch = inventory.filter(function(item){return item==option.with;});
-      if (inventoryMatch.length===0) // player does not has item
+      if ( !hasInInventory(option.with) ) // add option if user has got the item
         addOption = false;
-        
     }
     
-    if ( option.without )
+    if ( option.without ) 
     {
-      var inventoryMatch = inventory.filter(function(item){return item==option.without;});
-       if (inventoryMatch.length>0) // player has item
+       if ( hasInInventory(option.without) ) // add option if user hasn't got the item
         addOption = false;
         
     }
@@ -264,9 +270,19 @@ var stripSavedInventoryFromStory = function(){
   }
 };
 
+var createErrorCard = function(){
+  return new UI.Card({
+        title:'Something Went Wrong...',
+        body: 'Unable to download Adventure.  Is your Phone able to access the internet?  Please exit Adventure and try again.',
+        scrollable: true
+      });
+};
+
 var loadAdventure = function(gamefile, startingChapter, startingInventory){
   
- 
+  var loading = new UI.Card({subtitle: 'Loading...'});
+  loading.show();
+  
     ajax(
     {
       url: 'http://www.web-gear.net/Adventure/Stories/' + gamefile + '.json',
@@ -279,87 +295,150 @@ var loadAdventure = function(gamefile, startingChapter, startingInventory){
       
       stripSavedInventoryFromStory();
       
+      loading.hide();
+      
       gotoChapter(startingChapter);
+    },
+    function(error, status, request) {
+      loading.hide();
+      console.log('The ajax request failed: ' + error);
+      var errorCard = createErrorCard();
+      errorCard.show();
     });
+};
+
+ showEndMenu = function(){
+    
+    var options = [];
+  
+    options.push( {
+                id: 0,
+                title: 'Restart',
+                subtitle: 'Restart at the begining'
+              });
+  
+  var saveGame = Settings.data('saveGame');
+  if ( saveGame )
+    { 
+      options.push( {
+                id: 1,
+                title: 'Reload save',
+                subtitle: 'Resume saved game'
+              });
+    }
+   
+    options.push( {
+                id: 2,
+                title: 'Quit',
+                subtitle: 'Quit to menu'
+              });
+  
+    var menu = new UI.Menu({
+      sections: [{
+            items: options
+          }]
+    });
+  
+  
+    menu.on('select', function(e) {
+      if ( e.item.id === 0 ){
+        collectWindows();
+        loadAdventure(story.gamefile, 0, []);
+      }
+      if ( e.item.id === 1){
+        collectWindows();
+        inventory = saveGame.inventory;
+        loadAdventure(saveGame.gamefile, saveGame.chapter, saveGame.inventory);
+      }
+      if ( e.item.id === 2){
+          windowStack.push(this); // collect all the windows to the root (title screen)
+          collectWindows();
+          story = null;
+      }
+    });
+  
+   
+  windowStack.push(menu);
+  menu.show();
+  
+  
 };
 
 var startGame = function(){
-  
-//main window
-var main = new UI.Card({
-  title: ' Adventure',
-  body: '\nPress Select to Begin Your Adventure!',
-  icon: 'images/adventure.png'
-});
-main.show();
-main.on('click', 'select', function(e) {
-  //gotoChapter(0);
-  var items = [];
-  
-  var saveGame = Settings.data('saveGame');
-  
-  console.log('getting save game : ' + JSON.stringify(saveGame));
-  
-  if (saveGame){
-     items.push({
-        title: 'Resume Game',
-        subtitle: 'Continue the Adventure',
-       resume: true
-     });
-  } 
-  
-  
-  for(var y=0; y<storyList.stories.length; y++){
-      items.push({
-        title: 'Adventure ' + (y+1),
-        subtitle: storyList.stories[y].title,
-        gamefile: storyList.stories[y].gamefile
-      });
-  }
-  
-      //create menu with current chapter's options
-      var menu = new UI.Menu({
-        sections: [{
-          title: 'Choose an Adventure',
-          items: items
-        }]
-      });
-       
-      //on click, set current chapter
-      menu.on('select', function(e) {
-        if ( e.item.resume ){
-          inventory = saveGame.inventory;
-          loadAdventure(saveGame.gamefile, saveGame.chapter, saveGame.inventory);
-        }
-        else
-          loadAdventure(e.item.gamefile, 0, []);
-      });
-      
-      windowStack.push(menu);
-      menu.show();
-  
-});
+    
+  //main window
+  var main = new UI.Card({
+    title: ' Adventure',
+    body: '\nPress Select to Begin Your Adventure!',
+    icon: 'images/adventure.png'
+  });
+  main.show();
+  main.on('click', 'select', function(e) {
+    //gotoChapter(0);
+    var items = [];
+    
+    var saveGame = Settings.data('saveGame');
+    
+    console.log('getting save game : ' + JSON.stringify(saveGame));
+    
+    if (saveGame){
+       items.push({
+          title: 'Resume Game',
+          subtitle: 'Continue the Adventure',
+         resume: true
+       });
+    } 
+    
+    
+    for(var y=0; y<storyList.stories.length; y++){
+        items.push({
+          title: 'Adventure ' + (y+1),
+          subtitle: storyList.stories[y].title,
+          gamefile: storyList.stories[y].gamefile
+        });
+    }
+    
+        //create menu with current chapter's options
+        var menu = new UI.Menu({
+          sections: [{
+            title: 'Choose an Adventure',
+            items: items
+          }]
+        });
+         
+        //on click, set current chapter
+        menu.on('select', function(e) {
+          if ( e.item.resume ){
+            inventory = saveGame.inventory;
+            loadAdventure(saveGame.gamefile, saveGame.chapter, saveGame.inventory);
+          }
+          else
+            loadAdventure(e.item.gamefile, 0, []);
+        });
+        
+        windowStack.push(menu);
+        menu.show();
+    
+  });
 
 };
 
-ajax(
-  {
-    url: 'http://www.web-gear.net/Adventure/Stories/stories.json',
-    type: 'json'
-  },
-  function(data, status, request) {
-    storyList = data;
-    startGame();
-  },
-  function(error, status, request) {
-    console.log('The ajax request failed: ' + error);
-    var errorCard = new UI.Card({
-      title:'Something Went Wrong...',
-      body: 'Unable to download Adventures.  Is your Phone able to access the internet?  Please exit Adventure and try again.',
-      scrollable: true
-    });
-    errorCard.show();
-  }
-);
+var main = function(){
+  ajax(
+    {
+      url: 'http://www.web-gear.net/Adventure/Stories/stories.json',
+      type: 'json'
+    },
+    function(data, status, request) {
+      storyList = data;
+      startGame();
+    },
+    function(error, status, request) {
+      console.log('The ajax request failed: ' + error);
+      var errorCard = createErrorCard();
+      errorCard.show();
+    }
+  );
+};
 
-
+main();
