@@ -107,10 +107,12 @@ var showBackButtonMenu = function(chapterID){
              saveGame();
              windowStack.push(this); // collect all the windows to the root (title screen)
              collectWindows();
+             story = null;
             break;
           case 2:
              windowStack.push(this); // collect all the windows to the root (title screen)
              collectWindows();
+             story = null;
              break;
           case 3:
             displayInventory();
