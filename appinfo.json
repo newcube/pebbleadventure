@@ -29,6 +29,26 @@
                 "type": "font"
             },
             {
+                "file": "images/sword.png",
+                "name": "IMAGES_SWORD_PNG",
+                "type": "png"
+            },
+            {
+                "file": "images/titlebanner.png",
+                "name": "IMAGES_TITLEBANNER_PNG",
+                "type": "png"
+            },
+            {
+                "file": "images/crown.png",
+                "name": "IMAGES_CROWN_PNG",
+                "type": "png"
+            },
+            {
+                "file": "images/skull.png",
+                "name": "IMAGES_SKULL_PNG",
+                "type": "png"
+            },
+            {
                 "file": "images/adventure.png",
                 "menuIcon": true,
                 "name": "IMAGES_ADVENTURE_PNG",

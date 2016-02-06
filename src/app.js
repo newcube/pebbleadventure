@@ -165,8 +165,9 @@ var getChapterMenuOptions = function(currentID) {
     return inventory.indexOf(item) > -1;
   };
 
+  var optionCount = 0;
   for (var e = 0; e < currentChapter.options.length; e++) {
-
+    
     var option = currentChapter.options[e];
 
     var addOption = true;
@@ -183,8 +184,9 @@ var getChapterMenuOptions = function(currentID) {
     }
 
     if (addOption) {
+      optionCount++;
       options.push({
-        title: 'Option ' + (e + 1),
+        title: 'Option ' + (optionCount),
         subtitle: option.text,
         goto: option.goto
       });
@@ -294,20 +296,31 @@ var gotoChapter = function(chapterID) {
       cardBody += ' \n\nYou picked up ' + chapter.item + '!';
 
     if (chapter.isEnd)
-      cardBody += ' \n\nPress Back to try again!';
+      cardBody += ' \n\nPress Back to try again!\n ';
+    else if (chapter.isWin)
+      cardBody += ' \n\nYou did it!  Press Back to try a new adventure.\n ';
     else
-      cardBody += ' \n\nPress Select to choose...';
+      cardBody += ' \n\nWhat now..?\n ';
 
     var cardTitle = chapter.title;
 
+    var icon;
+    
+    if ( chapter.isEnd )
+      icon = 'images/skull.png';
+    
+     if ( chapter.isWin ) 
+      icon = 'images/' + chapter.winIcon + '.png';
+    
     var card = new UI.Card({
       body: cardBody,
       title: cardTitle,
-      scrollable: true
+      scrollable: true,
+      icon: icon
     });
 
     card.on('click', 'back', function() {
-      if (chapter.isEnd)
+      if (chapter.isEnd || chapter.isWin)
         showEndMenu();
       else
         showBackButtonMenu();
@@ -359,21 +372,21 @@ var gotoChapter = function(chapterID) {
       menu.show();
     });
   }
-};
-
-
+}; 
+ 
 var startGame = function() {
 
-  //main window
+  //main window 
   var main = new UI.Card({
     title: ' Adventure',
     body: '\nPress Select to Begin Your Adventure!',
-    icon: 'images/adventure.png'
+    icon: 'images/adventure.png',
+    scrollable: true
   });
   main.show();
   main.on('click', 'select', function(e) {
     //gotoChapter(0);
-    var items = [];
+    var items = []; 
 
     var saveGame = Settings.data('saveGame');
 
