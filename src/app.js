@@ -12,6 +12,12 @@ var currentChapter;
 var windowStack = [];
 var inventory = [];
 
+var getLoadingCard = function(){
+  return new UI.Card({
+    icon: 'images/adventure.png',
+    title: ' Loading...'
+  });
+};
 
 var getChapterByID = function(chapterID) {
   //get the current chapter by id
@@ -199,9 +205,7 @@ var getChapterMenuOptions = function(currentID) {
 
 var loadAdventure = function(gamefile, startingChapter, startingInventory) {
 
-  var loading = new UI.Card({
-    subtitle: 'Loading...'
-  });
+  var loading = getLoadingCard();
   loading.show();
 
   ajax({
@@ -290,11 +294,17 @@ var gotoChapter = function(chapterID) {
 
 
     var chapter = getChapterByID(chapterID);
+    var icon;
+    
     var cardBody = chapter.text;
-
+    
     if (chapter.item)
-      cardBody += ' \n\nYou picked up ' + chapter.item + '!';
-
+      {
+        cardBody += '\n\nYou\'ve found '  + chapter.item + '!';
+        icon = 'images/loot.png';
+      }
+     
+    
     if (chapter.isEnd)
       cardBody += ' \n\nPress Back to try again!\n ';
     else if (chapter.isWin)
@@ -304,7 +314,7 @@ var gotoChapter = function(chapterID) {
 
     var cardTitle = chapter.title;
 
-    var icon;
+   
     
     if ( chapter.isEnd )
       icon = 'images/skull.png';
@@ -433,16 +443,23 @@ var startGame = function() {
 
 };
 
+
+
+var loading = getLoadingCard();
+loading.show();
+
 ajax({
     url: 'http://www.web-gear.net/Adventure/Stories/stories.json',
     type: 'json'
   },
   function(data, status, request) {
     storyList = data;
+     loading.hide();
     startGame();
   },
   function(error, status, request) {
     console.log('The ajax request failed: ' + error);
+     loading.hide();
     var errorCard = createErrorCard();
     errorCard.show();
   }

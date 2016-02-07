@@ -29,6 +29,11 @@
                 "type": "font"
             },
             {
+                "file": "images/loot.png",
+                "name": "IMAGES_LOOT_PNG",
+                "type": "png"
+            },
+            {
                 "file": "images/sword.png",
                 "name": "IMAGES_SWORD_PNG",
                 "type": "png"
