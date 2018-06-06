@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="https://code.jquery.com/jquery-2.2.1.min.js"></script>
+
+</head>
+<body style="display:none">
+<xmp id="md" theme="Spacelab" style="display:none;"></xmp>
+<script>
+(function(){
+	$.ajax({
+			url:'helpText.md',
+			success: function(data){$('#md').text(data);},
+			async:false
+		}
+	);
+})();
+</script>
+<script src="http://strapdownjs.com/v/0.2/strapdown.js"></script>
+<script>
+	$('body').show();
+</script>
+</body>
+</html>

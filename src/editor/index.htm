@@ -1,0 +1,288 @@
+<html>
+
+<head>
+  <script src="http://code.jquery.com/jquery-2.2.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/ractive"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha256-KXn5puMvxCw+dAYznun+drMdG1IFl3agK0p/pqT9KAo= sha512-2e8qq0ETcfWRI4HJBzQiA3UoyFk6tbNyG+qSaIBZLyW9Xf3sWZHN/lxe9fTh1U45DpPf07yj94KsUHHWe4Yk1A==" crossorigin="anonymous"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/javascript-canvas-to-blob/3.1.0/js/canvas-to-blob.js"></script>
+  <script src="filesaver.min.js"></script>
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" integrity="sha256-7s5uDGW3AHqw6xtJmNNtr+OBRJUlgkNJEo78P4b0yRw= sha512-nNo+yCHEyn0smMxSswnf/OnX6/KwJuZTlNZBjauKhTK0c+zT+q5JOCx0UFhXQ6rJR9jg6Es8gPuD2uZcYDLqSw=="
+  crossorigin="anonymous">
+  <style>
+    body {
+      padding: 15px;
+    }
+    #jsonAdventure{
+      display:none;
+    }
+    .logo{
+      position:absolute;
+      top:0px;
+      right:0px;
+    }
+    .has-error textarea{
+      background-color: fcc;
+    }
+  </style>
+</head>
+<script type="text/ractive" id="template">
+<a name="top"/>
+<img src="dragon.png" class="logo"/>
+<h2><a href="https://apps.getpebble.com/en_US/application/56b78d5b360b51b55b00002e?section=watchapps" target="_blank">Adventure</a> for Pebble Editor</h2>
+<p>Send your Adventure file to <a href="mailto:adventure@newcube.net">adventure@newcube.net</a><br/><br/></p>
+  <div class="container-fluid">
+  <div class="well">
+    <div class="row">
+      <div class="col-sm-12">
+        <button id="exportButton" on-click="importAdventure()" class="btn btn-sm btn-info">Import Adventure...</button>&nbsp;
+        <button id="exportButton" on-click="exportAdventure()" class="btn btn-sm btn-info">Export Adventure to File</button>&nbsp;
+        <a class="btn btn-sm btn-primary" href="map.htm" target="mapScreen">Open Map</a>&nbsp;
+        <a class="btn btn-sm btn-warning" href="emulator.htm" target="emulatorScreen">Open Emulator</a>&nbsp;
+        <a class="btn btn-sm btn-success" href="help.htm" target="helpScreen">Help</a>&nbsp;
+        <button class="btn btn-sm btn-danger" on-click="deleteAdventure()">Delete Entire Adventure..!</button>
+      </div>
+    </div>
+  </div>
+  <div class="well">
+
+  <div class="form-horizontal">
+    <div class="form-group form-group-lg">
+      <label class="col-sm-3 control-label">Adventure Title</label>
+      <div class="col-sm-3">
+        <input class="form-control" value="{{adv.title}}" />
+      </div>
+    </div>
+  </div>
+  </div>
+    {{#each adv.chapters :c}}
+      <a id="ch{{this.id}}"></a><h4>Chapter {{this.id}} ({{this.title}}) Details <a class="pull-right btn btn-sm btn-link" href="#end">down to end</a> <a class="pull-right btn btn-sm btn-link" href="#top">back to top</a></h4>
+    <div class="well">
+    {{#if id > 0 }}
+      <div class="pull-right">
+        <button class="btn btn-sm btn-danger" on-click="deleteChapter(adv.chapters, c)">Delete Chapter {{id}} ({{title}})</button>
+      </div>
+    {{/if}}
+    <div class="form-horizontal">
+      <div class="form-group">
+        <label class="col-sm-offset-1 col-sm-2 control-label">Chapter ID</label>
+        <div class="col-sm-1">
+          <input class="form-control" {{ id>0 ? "" : "readonly=readonly" }}  value="{{this.id}}" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-sm-offset-1 col-sm-2 control-label">Chapter Title</label>
+        <div class="col-sm-3">
+          <input class="form-control" value="{{this.title}}" />
+        </div>
+      </div>
+      <div class="form-group {{this.text.length > 500 ? 'has-error' : ''}}">
+        <label class="col-sm-offset-1 col-sm-2 control-label">Chapter Body<br/>({{this.text.length}} / 500)</label>
+        <div class="col-sm-8">
+          <textarea class="form-control" rows="4" value="{{this.text}}"></textarea>
+
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-sm-offset-1 col-sm-2 control-label">Chapter Pickup Item</label>
+        <div class="col-sm-3">
+            <input class="form-control" value="{{this.item}}" />
+        </div>
+      </div>
+
+
+      <div class="form-group">
+        <label class="col-sm-offset-1 col-sm-2 control-label">Chapter Settings</label>
+        <div class="col-sm-8">
+          <div class="checkbox">
+            <label><input type="checkbox" class="" checked="{{this.isEnd}}"/> Is End of Adventure (Bad Outcome)</label>
+          </div>
+          <div class="checkbox">
+            <label><input type="checkbox" class="" checked="{{this.isWin}}"/> Is Winning Chapter (Good Outcome)</label>
+          </div>
+        </div>
+      </div>
+</div>
+
+  <h5>Chapter What Now..? Options</h5>
+  <div class="form-horizontal">
+    {{#each options :i}}
+    <div class="well">
+
+      <div class="pull-right"><button on-click="deleteChapterOption(options, i)" class="btn btn-warning btn-sm">Delete Option</button></div>
+
+      <div class="form-group">
+        <label class="col-sm-offset-2 col-sm-2 control-label">Go To Chapter ID</label>
+        <div class="col-sm-1">
+          <input class="form-control" value="{{this.goto}}"/>
+        </div>
+        <div class="col-sm-4">
+          <p class="form-control-static text-muted"><a href="#ch{{this.goto}}">{{ gotoTargetChapterTitle(this.goto) }}</a></p>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-sm-offset-2 col-sm-2 control-label">Option Menu Text</label>
+        <div class="col-sm-3">
+          <input class="form-control" value="{{this.text}}" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-sm-offset-2 col-sm-2 control-label">Show With Item</label>
+        <div class="col-sm-3">
+          <input class="form-control" value="{{this.with}}" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-sm-offset-2 col-sm-2 control-label">Show Without Item</label>
+        <div class="col-sm-3">
+          <input class="form-control" value="{{this.without}}" />
+        </div>
+      </div>
+
+    </div>
+
+    {{/each}}
+    </div>
+
+    <button class="btn btn-success" on-click="addChapterOption(this)">Add Option to Chapter {{id}} ({{title}})</button>
+
+    </div>
+    {{/each}}
+    <button class="btn btn-success" on-click="addChapter()">Add New Chapter</button>
+    <a name="end"/>
+  </div>
+</script>
+
+<body>
+  <div id="container"></div>
+  <input id="jsonAdventure" type="text"></input>
+  <br/><br/>
+  <p class="muted-text"><span class="pull-right">&copy; newcube 2016</span> <a href="https://apps.getpebble.com/en_US/application/56b78d5b360b51b55b00002e?section=watchapps">Get 'Adventure' for Pebble here</a></p>
+</body>
+
+<script>
+
+  var adv = {};
+  try {
+    adv = JSON.parse( localStorage.adventure );
+  } catch ( err ) {}
+  var ractiveData = {};
+  ractiveData.adv = adv;
+
+
+  //add calc property to data
+  ractiveData.gotoTargetChapterTitle = function(targetChapterID){
+    try{
+      return this.get('adv').chapters.filter(function(item) {return item.id == targetChapterID;})[0].title;
+    }
+      catch( err ) {return ' ## Warning, chapter not found ## ';}
+    };
+
+  var r = new Ractive({
+    el: 'container',
+    template: '#template',
+    data: ractiveData,
+    magic: true,
+    addChapter: function(){
+      var adventure = this.get('adv');
+      if ( !adventure.chapters )
+        adventure.chapters = [];
+
+        var maxID = -1;
+        adventure.chapters.forEach(function(c){if ( !isNaN(c.id) && c.id>maxID ){maxID = c.id;};  })
+
+        adventure.chapters.push({title:'new chapter', id:maxID+1, options: []});
+        this.update('adv');
+    },
+    addChapterOption: function(chapter){
+      if ( !chapter.options )
+        chapter.options = [];
+
+        chapter.options.push({text:'new option', goto:0});
+        this.update('adv');
+
+    },
+    deleteChapterOption: function(chapterOptions, indexToDelete){
+      bootbox.confirm("Are you sure you want to delete this option?", function(result) {
+        if ( result ) chapterOptions.splice(indexToDelete, 1);
+      });
+
+
+    },
+    deleteChapter: function(chapters, indexToDelete){
+      bootbox.confirm("Are you sure you want to delete this chapter?", function(result) {
+        if ( result ) chapters.splice(indexToDelete, 1);
+      });
+
+    },
+    deleteAdventure: function(){
+      var self = this;
+      bootbox.confirm("Are you sure you want to delete the entire Adventure and start again?", function(result) {
+        if ( result )  self.set('adv',{title:''});
+      });
+    },
+    exportAdventure: function(){
+      var ex = JSON.stringify(this.get('adv'));
+      var blob = new Blob([ex], {type: "text/plain;charset=utf-8"});
+      saveAs(blob, this.get('adv.title') +  "-adventure.json");
+    },
+    importAdventure: function(){
+      var self = this;
+      bootbox.dialog({
+                title: "Import Adventure",
+                message: '<div class="row">  ' +
+                    '<div class="col-md-12"> ' +
+                    '<form class="form-horizontal"> ' +
+                    '<div class="form-group"> ' +
+                    '<div class="col-md-offset-1 col-md-10 "> ' +
+                    '<textarea id="importjson" name="importjson" placeholder="{title:... }" rows="5" class="form-control input-md"></textarea> ' +
+                    '<span class="help-block">Paste the Adventure file Content here</span><span class="text-warning">Warning this will overwrite your current Adventure</span></div> ' +
+                    '</div> ' +
+                    '</form> </div>  </div>',
+                buttons: {
+                    cancel: {
+                        label: "Cancel",
+                        className: "btn-default"
+                    },
+                    success: {
+                        label: "Import",
+                        className: "btn-success",
+                        callback: function () {
+                            try{
+                              var importedJSON = $('#importjson').val();
+                              self.set('adv', JSON.parse(importedJSON));
+                            }
+                            catch (err) {
+                              bootbox.alert("Error - Invalid adventure format");
+                            }
+                        }
+                    }
+                }
+            }
+        );
+    }
+
+  });
+
+  // persist changes to localStorage if possible
+r.observe( 'adv', function ( adv ) {
+  try {
+    var json = JSON.stringify( adv );
+    document.getElementById('jsonAdventure').value = json;
+    localStorage.adventure = json;
+  } catch ( err ) {console.log(err);}
+});
+
+r.observe( 'adv.chapters.*', function ( newValue, oldValue, keypath ) {
+  try {
+    if ( newValue.isWin == true)
+      this.set(keypath + '.winIcon', 'crown');
+    else
+      this.set(keypath + '.winIcon', undefined);
+
+  } catch ( err ) {console.log(err);}
+});
+
+</script>
+
+</html>

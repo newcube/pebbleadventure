@@ -1,0 +1,214 @@
+<html>
+<head>
+  <script src="http://code.jquery.com/jquery-2.2.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/ractive"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/2.7.23/cytoscape.js"></script>
+  <script src="https://cdn.rawgit.com/cytoscape/cytoscape.js-cose-bilkent/1.0.2/cytoscape-cose-bilkent.js"></script>
+  <script src="https://cdn.rawgit.com/cytoscape/cytoscape.js-qtip/2.2.5/cytoscape-qtip.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" ></script>
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" />
+  <script>
+    var adv = JSON.parse(localStorage.adventure);
+  </script>
+  <script type="text/ractive" id="template">
+  {{#if this.type == 'chapter'}}
+<div class="well">
+  <div class="form-horizontal">
+    <div class="form-group">
+      <label class="col-sm-6 control-label">Chapter ID</label>
+      <div class="col-sm-6">
+        <p class="form-control-static">{{this.id}}</p>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-6 control-label">Chapter Title</label>
+      <div class="col-sm-6">
+        <p class="form-control-static">{{this.title}}</p>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-6 control-label">Chapter Body</label>
+      <div class="col-sm-6">
+        <p class="form-control-static">{{this.text}}</p>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-6 control-label">Chapter Pickup Item</label>
+      <div class="col-sm-6">
+        <p class="form-control-static">{{this.item}}</p>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-sm-6 control-label">Chapter Settings</label>
+      <div class="col-sm-6">
+        <div class="checkbox">
+          <label>
+            <input type="checkbox" disabled checked="{{this.isEnd}}" /> Is End of Adventure (Bad Outcome)</label>
+        </div>
+        <div class="checkbox">
+          <label>
+            <input type="checkbox" disabled checked="{{this.isWin}}" /> Is Winning Chapter (Good Outcome)</label>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+  {{else}}
+  <div class="well">
+  <div class="form-horizontal">
+
+    <div class="form-group">
+      <label class="col-sm-6 control-label">Go To Chapter ID</label>
+      <div class="col-sm-6">
+          <p class="form-control-static">{{this.goto}}</p>
+      </div>
+
+    </div>
+    <div class="form-group">
+      <label class="col-sm-6 control-label">Option Menu Text</label>
+      <div class="col-sm-6">
+        <p class="form-control-static">{{this.text}}</p>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-6 control-label">Show With Item</label>
+      <div class="col-sm-6">
+        <p class="form-control-static">{{this.with}}</p>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-6 control-label">Show Without Item</label>
+      <div class="col-sm-6">
+        <p class="form-control-static">{{this.without}}</p>
+      </div>
+    </div>
+
+  </div>
+  {{/if}}
+  </script>
+<style>
+#cy {
+  height: 800px;
+  width:800px;
+  display: block;
+  background-color: #efefef;
+  border: 1px solid #ccc;
+}
+#info {
+  position: absolute;
+  left:805px;
+  top:0px;
+  height: 800px;
+  width:400px;
+  display: block;
+  background-color: #fff;
+  padding:5px;
+  border: 1px solid #ccc;
+}
+</style>
+</head>
+
+<body>
+  <div id="cy"></div>
+  <div id="info"></div>
+</body>
+<script>
+
+//parse adventure in to elements
+var elements = [];
+
+var chapters = adv.chapters;
+$.each(chapters, function( index, chapter ) {
+  var col = '#666';
+
+  if (chapter.isEnd)
+    col = '#800';
+
+  if (chapter.isWin)
+    col = '#bb0';
+
+  if (chapter.id == '0')
+      col = '#080';
+
+
+  var data = {data:
+              {
+                  type:'chapter',
+                  data:chapter,
+                  id:chapter.id,
+                  bgColor: col
+              }
+            };
+
+  elements.push(data);
+
+  $.each(chapter.options, function(opIndex, chapterOption){
+      var data = {data:
+                    {
+                      id: chapter.id + '-' + chapterOption.goto,
+                      source:chapter.id,
+                      target:chapterOption.goto,
+                      type:'goto',
+                      data:chapterOption,
+                    }
+                  };
+
+      elements.push(data);
+  });
+
+});
+
+
+var cy = cytoscape({
+
+  container: document.getElementById('cy'), // container to render in
+  elements : elements,
+  style: [ // the stylesheet for the graph
+    {
+      selector: 'node',
+      style: {
+        'background-color': 'data(bgColor)',
+        'label': 'data(id)'
+      }
+    },
+
+    {
+      selector: 'edge',
+      style: {
+        'width': 3,
+        'line-color': '#ccc',
+        'target-arrow-color': '#ccc',
+        'target-arrow-shape': 'triangle'
+      }
+    }
+  ],
+
+  layout: {
+    name: 'cose-bilkent'
+  }
+
+});
+
+cy.on('tap', function(event){
+  // cyTarget holds a reference to the originator
+  // of the event (core or element)
+  var evtTarget = event.cyTarget;
+
+  if( evtTarget !== cy ){
+    var data = evtTarget.element().data()['data'];
+    data.type = evtTarget.element().data()['type'];
+    console.log(data);
+    r.set(data);
+  }
+});
+
+var ractiveData = {};
+var r = new Ractive({
+  el: 'info',
+  template: '#template',
+  data: ractiveData
+});
+
+</script>
+</html>

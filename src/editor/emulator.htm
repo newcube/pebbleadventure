@@ -1,0 +1,116 @@
+<html>
+<head>
+  <script src="http://code.jquery.com/jquery-2.2.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/ractive"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" >
+  <style>
+  body{padding-top:15px;}
+  </style>
+</head>
+<script type="text/ractive" id="template">
+
+<div class="container-fliud">
+<div class="col-sm-6">
+	<div class="well">
+		<h3>{{chapter.id}} : {{chapter.title}}</h3>
+		<p>{{chapter.text}}</p>
+		<br/>
+			{{#each chapter.options}}
+			{{#if hideOption(this, inventory) }}
+			<div><a on-click="gotoChapter(this.goto)" class="btn btn-default btn-block">{{this.text}}</a></div>
+			{{/if}}
+			{{/each}}
+		{{#if chapter.isWin || chapter.isEnd}}
+			<a class="btn btn-warning" href="emulator.htm">Restart</a>
+		{{/if}}
+	</div>
+</div>
+<div class="col-sm-6">
+	<div class="well">
+		<h3>Inventory</h3>
+		<ul>
+		{{#each inventory}}
+		<li>{{.}}</li>
+		{{/each}}
+		</ul>
+	</div>
+</div>
+</div>
+
+</script>
+
+<body>
+<div id="container"></div>
+</body>
+
+<script>
+
+  var inventory = [];	
+  var adv = {};
+  try {
+    adv = JSON.parse( localStorage.adventure );
+  } catch ( err ) {}
+  var ractiveData = {};
+  
+  var getChapterById = function(id){
+		var chap = adv.chapters.filter(function(e){return e.id == id})[0];
+		return chap;
+	};
+	
+  
+	ractiveData.chapter = getChapterById(0);
+	ractiveData.inventory = [];
+	
+	ractiveData.hideOption = function(chapterOption,inventory){
+	
+		if ( !chapterOption )
+			return false;
+	
+	  var hasInInventory = function(item) {
+		return inventory.indexOf(item) > -1;
+	  };
+	
+		if ( chapterOption.with ){
+			if (!hasInInventory(chapterOption.with) )
+				return false;
+		}
+		
+		if ( chapterOption.without ) { 
+			if ( hasInInventory(chapterOption.without) )
+			return false;
+		}
+	
+		return true;
+	};
+
+var r = new Ractive({
+    el: 'container',
+    template: '#template',
+    data: ractiveData,
+	gotoChapter : function(chapterID){
+	
+		var newChapter = getChapterById(chapterID);
+		this.set('chapter',getChapterById(chapterID));
+		var item = this.get('chapter.item');
+		
+		if (item){
+			this.push('inventory',item);
+			this.set('chapter.item',undefined);
+			}
+	}
+	
+	
+	});
+</script>
+</html>
+
+
+
+
+
+
+
+
+
+

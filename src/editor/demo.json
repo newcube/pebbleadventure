@@ -1,0 +1,723 @@
+{
+  "title": "Crown Quest",
+  "chapters": [{
+      "id": 0,
+      "title": "The Garden",
+      "text": "You appear to be in an English country garden surrounded by tall trees and a hedge. A path leads off to the North and a small cave entrance is half hidden behind a bush. In one of the tallest trees you can see a small wooden house and a stone wall lies to the south. Hammered in to the grass is a sign.",
+      "options": [
+      {
+        "goto": 27,
+        "text": "Read sign"
+      }, {
+        "goto": 2,
+        "text": "Climb tall tree"
+      }, {
+        "goto": 10,
+        "text": "Investigate cave"
+      }, {
+        "goto": 5,
+        "text": "Walk down the path",
+        "without": "a twig"
+      }, {
+        "goto": 6,
+        "text": "Walk down the path",
+        "with": "a twig"
+      }, {
+        "goto": 9,
+        "text": "Walk over to wall"
+      }, {
+        "goto": 30,
+        "with": "leather gloves",
+        "text": "Examine hedge"
+      }, {
+        "goto": 31,
+        "without": "leather gloves",
+        "text": "Examine hedge"
+      }]
+    }, {
+      "id": 2,
+      "title": "Tree House",
+      "text": "You are in a small but cosy tree house.  Little chairs are set around a table. On the table are arranged tiny tea cups ready for a party. In the corner of the room is a little box full of mostly useless toys.",
+      "item": "a torch",
+      "options": [{
+        "goto": 0,
+        "text": "Jump down"
+      }, {
+        "goto": 3,
+        "text": "Climb higher"
+      }]
+    }, {
+      "id": 3,
+      "title": "Tree Branches",
+      "text": "Higher up the tree the wind begins to make the tree sway in an alarming fashion.",
+      "item": "a twig",
+      "options": [{
+        "goto": 2,
+        "text": "Climb down"
+      }, {
+        "goto": 4,
+        "text": "Climb higher"
+      }]
+    }, {
+      "id": 4,
+      "title": "Top of the Tree",
+      "text": "As you ascend the branches get thinner and thinner and the wind gets stronger.  You look around, and just as you are saying \"I think I can see my house from here..\" the tiny branch you are standing on snaps and you tumble down to your death.",
+      "isEnd": true
+    }, {
+      "id": 5,
+      "title": "Shed Door",
+      "text": "At the end of the path you find a shed. You try the door but it seems locked.  On further investigation you see it is latched from the inside but your stubby fingers can't quite squeeze through the gap between the door and frame.",
+      "options": [{
+        "goto": 0,
+        "text": "Go back"
+      }]
+    }, {
+      "id": 6,
+      "title": "Shed Door",
+      "text": "At the end of the path you find a shed. Using the twig, you manage to lift the latch and unlock the door!",
+      "options": [{
+        "goto": 7,
+        "text": "Look inside"
+      }, {
+        "goto": 0,
+        "text": "Go back"
+      }]
+    }, {
+      "id": 7,
+      "title": "Inside Shed",
+      "text": "Looking around the dusty shed, you see some battered paint tins, an old petrol lawn mower and a rusty old bike.",
+      "item": "a bike helmet",
+      "options": [{
+        "goto": 0,
+        "text": "Leave shed"
+      }]
+    }, {
+      "id": 9,
+      "title": "The Garden Maze",
+      "text": "Set into the stone wall you find a grand arch decorated with carved stone swords. Through the arch you can see a square stone room.",
+      "options": [{
+        "goto": 0,
+        "text": "Back to garden"
+      }, {
+        "goto": 17,
+        "text": "Enter the maze"
+      }]
+    }, {
+      "id": 10,
+      "title": "Cave Entrance",
+      "text": "The cave seems to be very dark, dank and smelly.  There is a steep rocky path leading in. You can also feel a deep down rumbling noise blowing up on the feted breeze.",
+      "options": [{
+        "goto": 15,
+        "text": "Enter cave",
+        "with": "a torch"
+      }, {
+        "goto": 11,
+        "text": "Enter cave",
+        "without": "a torch"
+      }, {
+        "goto": 0,
+        "text": "Back to garden"
+      }]
+    }, {
+      "id": 11,
+      "title": "Dark Cave",
+      "text": "Stumbling into the pitch black cave you lose your footing and begin to tumble. Suddenly you are in inky open space and falling. Not for long though as you smash your head to a pulp on the boulder strewn floor of the cave below.",
+      "isEnd": true
+    }, {
+      "id": 15,
+      "title": "The Cave",
+      "text": "In the flickering torch light, you see a deep hole before you.  Holding out your torch you see, although it's covered in boulders, you should be able to jump down safely.",
+      "options": [{
+        "goto": 14,
+        "text": "Jump down hole",
+        "without": "a crown"
+      }, {
+        "goto": 16,
+        "text": "Jump down hole",
+        "with": "a crown"
+      }, {
+        "goto": 0,
+        "text": "Leave cave"
+      }]
+    }, {
+      "id": 14,
+      "title": "Troll's Lair",
+      "text": "You lightly land on your feet at the bottom of the hole, the stench now becoming almost unbearable.  You find yourself in a large cavern covered in fly buzzing corpses and half eaten sheep and pigs. Before you, stands a huge troll blocking a tunnel.",
+      "options": [{
+        "goto": 13,
+        "text": "Fight troll",
+        "with": "a sword"
+      }, {
+        "goto": 12,
+        "text": "Fight troll",
+        "without": "a sword"
+      }]
+    }, {
+      "id": 12,
+      "title": "Troll's Lair",
+      "text": "You rush at the Troll swinging your arms wildly, fists slamming home again and again. The Troll, with a look of bewilderment, grabs your head in his meaty hand, picks you up and slams you against the wall of the cave.  The last thing that goes through your mind is the Troll's stinking rag bound foot.",
+      "isEnd": true
+    }, {
+      "id": 13,
+      "title": "Troll's Lair",
+      "text": "Drawing your sword you attack the hideous beast with slash after slash. The Troll swats at you but is unable to get past your fearful display of swordsmanship. Jumping to the side as the Troll desperately charges, you pivot and plunge your blade in the back of it's neck. You've slain the brute! Looking around the cavern you uncover a sack of the Troll's ill gotten gains...",
+      "item": "a crown",
+      "options": [{
+        "goto": 29,
+        "text": "Follow tunnel"
+      }]
+    }, {
+      "id": 16,
+      "title": "Troll's Lair",
+      "text": "You lightly land on your feet at the bottom of the hole, the stench now becoming almost unbearable.  You find yourself in a large cavern covered in fly buzzing corpses and half eaten sheep and pigs. Before you lies a dead stinking Troll.",
+      "options": [{
+        "goto": 29,
+        "text": "Follow tunnel"
+      }]
+    }, {
+      "id": 17,
+      "title": "The Garden Maze",
+      "text": "You are in a square stone room",
+      "options": [{
+        "goto": 0,
+        "text": "Back to garden"
+      }, {
+        "goto": 18,
+        "text": "Go east"
+      }, {
+        "goto": 20,
+        "text": "Go south"
+      }]
+    }, {
+      "id": 18,
+      "title": "The Garden Maze",
+      "text": "You are in a square stone room",
+      "options": [{
+        "goto": 19,
+        "text": "Go east"
+      }, {
+        "goto": 21,
+        "text": "Go south"
+      }, {
+        "goto": 17,
+        "text": "Go west"
+      }]
+    }, {
+      "id": 19,
+      "title": "The Garden Maze",
+      "text": "You are in a square stone room",
+      "options": [{
+        "goto": 22,
+        "text": "Go south"
+      }, {
+        "goto": 18,
+        "text": "Go west"
+      }]
+    }, {
+      "id": 20,
+      "title": "The Garden Maze",
+      "text": "You are in a square stone room",
+      "options": [{
+        "goto": 17,
+        "text": "Go north"
+      }]
+    }, {
+      "id": 21,
+      "title": "The Garden Maze",
+      "text": "You are in a square stone room. Looking around.  This room seems very slightly larger than the rest.",
+      "options": [{
+        "goto": 18,
+        "text": "Go north"
+      }, {
+        "goto": 23,
+        "text": "Go south"
+      }]
+    }, {
+      "id": 22,
+      "title": "The Garden Maze",
+      "text": "You are in a square stone room",
+      "options": [{
+        "goto": 19,
+        "text": "Go north"
+      }, {
+        "goto": 24,
+        "text": "Go south"
+      }]
+    }, {
+      "id": 23,
+      "title": "The Garden Maze",
+      "text": "You are in a square stone room",
+      "options": [{
+        "goto": 21,
+        "text": "Go north"
+      }, {
+        "goto": 25,
+        "text": "Go west",
+        "without": "a sword"
+      }, {
+        "goto": 26,
+        "text": "Go west",
+        "with": "a sword"
+      }]
+    }, {
+      "id": 24,
+      "title": "The Garden Maze",
+      "text": "You are in a square stone room",
+      "item": "leather gloves",
+      "options": [{
+        "goto": 22,
+        "text": "Go north"
+      }]
+    }, {
+      "id": 25,
+      "title": "Maze Sword Room",
+      "text": "This room is round with beautifully carved walls.  Sunlight streams down to the centre of the room lighting a large rough golden coloured stone, about half your height.  Protruding from the stone is a sword.",
+      "item": "a sword",
+      "options": [{
+        "goto": 23,
+        "text": "Go east"
+      }]
+    }, {
+      "id": 26,
+      "title": "Sword Room",
+      "text": "This room is round with beautifully carved walls.  Sunlight streams down to the centre of the room lighting a large rough golden coloured stone, about half your height.  You see a deep empty slot cut in to the top of the stone.",
+      "options": [{
+        "goto": 23,
+        "text": "Go east"
+      }]
+    }, {
+      "id": 27,
+      "title": "The Royal Decree",
+      "text": "The sign reads \"Citizens of The Kingdom, your king, Stromm XVI has decreed : Whoever returns the stolen Royal Crown to the King's treasure room will receive the keys to the kingdom in gratitude and their pick from the royal Prince and Princess to do with as they wish.  Signed, King Stromm XVI\"",
+      "options": [{
+        "goto": 0,
+        "text": "Finish reading"
+      }]
+    }, {
+      "id": 29,
+      "title": "Cave Tunnel",
+      "text": "The tunnel rises up and curves round to the west.  After you have been climbing for a while you come across a wide crack in the floor which you can squeeze through.  Looking down you see you are above the roof of the cave where you came in!",
+      "options": [{
+        "goto": 15,
+        "text": "Drop into cave"
+      }]
+    }, {
+      "id": 30,
+      "title": "Garden Hedge",
+      "text": "The hedge is made of roses and brambles.  It smells incredible but looks very spiky, but with your gloves you think you can find a way through.",
+      "options": [{
+        "goto": 0,
+        "text": "Back to garden"
+      }, {
+        "goto": 32,
+        "text": "Push through"
+      }]
+    }, {
+      "id": 31,
+      "title": "Garden Hedge",
+      "text": "The hedge is made of roses and brambles.  It smells incredible but looks very spiky. You try to find a way through but are kept back by the sharp spines.",
+      "options": [{
+        "goto": 0,
+        "text": "Back to garden"
+      }]
+    }, {
+      "id": 32,
+      "title": "Open Field",
+      "text": "You are in a wide open field with green grass swaying gently in the breeze as far as the eye can see.  On the horizon you can just make out a tall tower with four turrets climbing high in to the sky. To the south flows a great river.",
+      "options": [{
+        "goto": 0,
+        "text": "Back through hedge"
+      }, {
+        "goto": 39,
+        "text": "Walk to tower"
+      }, {
+        "goto": 33,
+        "text": "Walk to river"
+      }]
+    }, {
+      "id": 39,
+      "title": "Ancient Tower",
+      "text": "Rising above you stands a wooden tower, almost impossibly high.  On top, you can just make out four turrets.  The tower seems abandoned.  Behind you to the south lies a vast grassy field.",
+      "options": [{
+        "goto": 32,
+        "text": "Walk to field"
+      }, {
+        "goto": 40,
+        "text": "Enter tower"
+      }]
+    }, {
+      "id": 40,
+      "title": "Ancient Tower",
+      "text": "Before you rise two enormous spiral stairways, one to the east, one to the west.",
+      "options": [{
+        "goto": 41,
+        "with":"a rope",
+        "text": "Climb the East stairs"
+      }, {
+        "goto": 42,
+        "without":"a rope",
+        "text": "Climb the East stairs"
+      }, {
+        "goto": 49,
+        "text": "Climb the West stairs"
+      }, {
+        "goto": 32,
+        "text": "Back to the field"
+      }]
+    },{
+      "id": 41,
+      "title": "East Stairs",
+      "text": "After what seems like hours of stair climbing, you come to a gap where the stairs have rotted and fallen away. Using your rope, you swing across to the far side.",
+      "options": [{
+        "goto": 50,
+        "text": "Keep climbing up"
+      }, {
+        "goto": 40,
+        "text": "Go down stairs"
+      }]
+    }, {
+      "id": 42,
+      "title": "East Stairs",
+      "text": "After what seems like hours of stair climbing, you come to a gap where the stairs have rotted and fallen away. The gap doesn't look too far...",
+      "options": [{
+        "goto": 40,
+        "text": "Go down stairs"
+      }, {
+        "goto": 48,
+        "text": "Jump gap"
+      }]
+    },
+
+
+    {
+      "id": 44,
+      "title": "North Turret",
+      "text": "The north turret is a tiny dark room that seemed to have been once a bed room.  The window is boarded up and there is straw and music books on the floor.",
+      "item": "a golden harp",
+      "options": [{
+        "goto": 50,
+        "text": "Back to hallway"
+      }]
+    },
+    {
+      "id": 45,
+      "title": "East Turret",
+      "text": "The east turret has huge open windows looking over the kingdom. Far below to the south you can see a river.",
+      "options": [{
+        "goto": 50,
+        "text": "Back to hallway"
+      }]
+    },
+    {
+      "id": 46,
+      "title": "South Turret",
+      "text": "The south turret has no windows and you are sure you feel the whole room swaying in the wind.",
+      "options": [{
+        "goto": 49,
+        "text": "Back to hallway"
+      }]
+    },
+    {
+      "id": 47,
+      "title": "West Turret",
+      "text": "The west turret is a small hexagonal room that seemed to have been once a storeroom. Various rusty tools and canvas sheets lie around the floor.",
+      "item": "a rope",
+      "options": [{
+        "goto": 49,
+        "text": "Back to hallway"
+      }]
+    },
+    {
+      "id": 48,
+      "title": "East Stairs",
+      "text": "You take a couple of steps back then run as hard as you can to the edge of the gap, ready to jump.  Just as you push off the rotten stair crumbles under your foot sending you plummeting down to your doom.",
+      "isEnd": true
+    }, {
+      "id": 49,
+      "title": "West Hallway",
+      "text": "You come to a hallway with two doors, one to the west, one to the south.",
+      "options": [{
+        "goto": 47,
+        "text": "Enter west door"
+      },{
+        "goto": 46,
+        "text": "Enter south door"
+      }, {
+        "goto": 40,
+        "text": "Climb down to bottom"
+      }]
+    }, {
+      "id": 50,
+      "title": "East Hallway",
+      "text": "You come to a hallway with two doors, one to the east, one to the north.",
+      "options": [{
+        "goto": 45,
+        "text": "Enter east door"
+      },{
+        "goto": 44,
+        "text": "Enter north door"
+      }, {
+        "goto": 40,
+        "text": "Climb down to bottom"
+      }]
+    },{
+      "id": 33,
+      "title": "North Riverbank",
+      "text": "You're standing on the bank of a fast flowing river. Crossing the river are some stepping stones. To the north there is a wide open field of green grass.",
+      "options": [{
+        "goto": 32,
+        "text": "Walk to green field"
+      },{
+        "goto": 38,
+        "text": "Cross stepping stones"
+      }, {
+        "goto": 35,
+        "text": "Jump in and swim"
+      }]
+    },{
+      "id": 38,
+      "title": "Stepping Stones",
+      "text": "You jump on to the first stone, ahead of you lies two paths in the river one made of round stones, one of squares.",
+      "options": [{
+        "goto": 36,
+        "text": "Jump on round stone"
+      },{
+        "goto": 35,
+        "text": "Jump on square stone"
+      }]
+    },{
+      "id": 35,
+      "title": "The River",
+      "text": "Splash! You find yourself in the river, being dragged along in the strong current. Ahead you hear a deafening roar.",
+      "options": [{
+        "goto": 37, "with":"a bike helmet",
+        "text": "Float on your back"
+      },{
+        "goto": 72, "without":"a bike helmet",
+        "text": "Float on your back"
+      },{
+        "goto": 36,
+        "text": "Swim hard to the bank"
+      }]
+    },{
+      "id": 36,
+      "title": "South Riverbank",
+      "text": "You reach the river bank and pull yourself out of the water, shaking but alive. To the west you can see a golden field.",
+      "options": [{
+        "goto": 51,
+        "text": "Walk to field"
+      }]
+    },{
+      "id": 37,
+      "title": "Waterfall",
+      "text": "You crash over the lip of a waterfall and plummet to the river below, fearing the worst. Hitting the water hard, luck is with you as you flail around in the rocky plunge pool, your bike helmet taking the brunt of the hits.  Dragging yourself to the muddy bank you discover various battered and rusted items that must have taken the same path you just did. To the west you see a golden field.",
+        "item":"some gold coins",
+      "options": [{
+        "goto": 51,
+        "text": "Walk to field"
+      }]
+    },{
+      "id": 72,
+      "title": "Waterfall",
+      "isEnd":true,
+      "text": "You crash over the lip of a waterfall and plummet to the river below. Hitting the water hard, you flail around in the rocky plunge pool, your head smashing against rock after rock until you sink to the bottom, unconscious..."
+    },{
+      "id": 51,
+      "title": "Golden Field",
+      "text": "You're standing in a field full of golden wheat.  To the west you can see the Kingdom City Gate. To the north lies the river crossing.",
+      "options": [{
+        "goto": 52,
+        "text": "Approach the city gate"
+      },{
+        "goto": 33,
+        "text": "Cross river"
+      }]
+    },{
+      "id": 52,
+      "title": "City Wall",
+      "text": "You are standing before a vast city wall. Grey stone blocks sweep away to the north and south. At the base of a tower is the City Gate.  There is a large angry looking guard on duty. Behind you lies a field full of golden wheat.",
+      "options": [{
+        "goto": 53,
+        "without":"some gold coins",
+        "text": "Walk past guard"
+      },{
+        "goto": 54,
+        "with":"some gold coins",
+        "text": "Walk past guard"
+      },{
+        "goto": 51,
+        "text": "Walk to field"
+      }]
+    },{
+      "id": 53,
+      "title": "Kingdom City",
+      "text": "As you approach the guard, he lowers the tip of his spear to your face.  He looks you up and down, mumbles something under his breath about gold then snarls.",
+      "options": [{
+        "goto": 52,
+        "text": "Back away slowly"
+      }]
+    },{
+      "id": 54,
+      "title": "Kingdom City",
+      "text": "As you approach the guard, he lowers the tip of his spear to your face.  Then, without a word takes some of your gold coins and moves to the side. You decide to hurry on by while the going is good.",
+      "options": [{
+        "goto": 55,
+        "text": "Run past guard"
+      }]
+    },{
+      "id": 55,
+      "title": "Kingdom City",
+      "text": "You are standing in Kingdom City.  There is a huge grand looking building to the north with a large crown carved in to the stone above the door. The guard house is behind you and the guard seems distracted.",
+      "options": [{
+        "goto": 58,
+        "text": "Enter building"
+      },{
+        "goto": 52,
+        "text": "Leave the city"
+      }]
+    }
+
+    ,{
+      "id": 58,
+      "title": "King's Palace",
+      "text": "You are in a large official looking room. It has green carpet. There is an exit to the street to your south.",
+      "options":
+        [
+            {"goto": 62,"text": "Go north"},
+            {"goto": 59,"text": "Go east"},
+            {"goto": 57,"text": "Go west"},
+            {"goto": 54,"text": "Leave building"}
+        ]
+    },{
+      "id": 59,
+      "title": "King's Palace",
+      "text": "You are in a large official looking room. It has red carpet.",
+      "options":
+        [
+            {"goto": 63,"text": "Go north"},
+            {"goto": 58,"text": "Go west"}
+        ]
+    },{
+      "id": 56,
+      "title": "King's Palace",
+      "text": "You are in a large official looking room. It has red carpet.",
+      "options":
+        [
+            {"goto": 57,"text": "Go east"}
+        ]
+    },{
+      "id": 57,
+      "title": "King's Palace",
+      "text": "You are in a large official looking room. It has red carpet.",
+      "options":
+        [
+            {"goto": 58,"text": "Go east"},
+            {"goto": 56,"text": "Go west"}
+        ]
+    },{
+      "id": 60,
+      "title": "King's Palace",
+      "text": "You are in a large official looking room. It has green carpet.",
+      "options":
+        [
+            {"goto": 61,"text": "Go east"},
+            {"goto": 64,"text": "Go north"}
+        ]
+    },{
+      "id": 61,
+      "title": "King's Palace",
+      "text": "You are in a large official looking room. It has green carpet.",
+      "options":
+        [
+            {"goto": 62,"text": "Go east"},
+            {"goto": 65,"text": "Go north"},
+            {"goto": 60,"text": "Go west"}
+        ]
+    },{
+      "id": 62,
+      "title": "King's Palace",
+      "text": "You are in a large official looking room. It has green carpet.",
+      "options":
+        [
+            {"goto": 58,"text": "Go south"},
+            {"goto": 66,"text": "Go north"},
+            {"goto": 61,"text": "Go west"}
+        ]
+    },{
+      "id": 63,
+      "title": "King's Palace",
+      "text": "You are in a large official looking room. It has red carpet.",
+      "options":
+        [
+            {"goto": 59,"text": "Go south"},
+            {"goto": 67,"text": "Go north"}
+        ]
+    },{
+      "id": 64,
+      "title": "King's Palace",
+        "item":"a palace key",
+      "text": "You are in a large official looking room. It has red carpet.",
+      "options":
+        [
+            {"goto": 60,"text": "Go south"}
+        ]
+    },{
+      "id": 65,
+      "title": "King's Palace",
+      "text": "You are in a large official looking room. It has green carpet. A heavy door with \"Treasure Room\" carved in to it lies to the north",
+      "options":
+        [
+            {"goto": 68,"text": "Go north", "with":"a palace key"},
+            {"goto": 69,"text": "Go north", "without":"a palace key"},
+            {"goto": 59,"text": "Go south"}
+        ]
+    },{
+      "id": 66,
+      "title": "King's Palace",
+      "text": "You are in a large official looking room. It has red carpet.",
+      "options":
+        [
+            {"goto": 62,"text": "Go south"},
+            {"goto": 67,"text": "Go east"}
+        ]
+    },{
+      "id": 67,
+      "title": "King's Palace",
+      "text": "You are in a large official looking room. It has red carpet.",
+      "options":
+        [
+            {"goto": 63,"text": "Go south"},
+            {"goto": 66,"text": "Go west"}
+        ]
+    },{
+      "id": 68,
+      "title": "Treasure Room",
+      "text": "The heavy door swings open revealing a large room filled with gold and silver.  The King turns from the counting table motions his guards towards you.  \"So, where is my crown?\"",
+      "options":
+        [
+            {"goto": 71,"text": "Give him the crown","with":"a crown"},
+            {"goto": 70,"text": "Umm...", "without":"a crown"}
+        ]
+    },{
+      "id": 69,
+      "title": "King's Palace",
+      "text": "You try to open the door to the Treasure Room but it's locked shut.",
+      "options":
+        [
+            {"goto": 65,"text": "Go back"}
+        ]
+    },{
+      "id": 70,
+      "title": "Treasure Room",
+        "isEnd" : true,
+      "text": "Backing away empty handed you try to turn and run but before you do a large guard swings his sword at you and cleanly cuts off your head."
+    },{
+      "id": 71,
+      "title": "Treasure Room",
+        "isWin" : true,
+        "winIcon" : "crown",
+      "text": "You fumble in your pack and pull out the glittering Royal Crown.  The king takes it from your shaking hand and with a huge laugh throws his arms around you.  Later in the day, after a bath and a good meal you are lead to the Prince and Princess chambers for your well earned reward..!"
+    }
+
+  ]
+}
