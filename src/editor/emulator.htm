@@ -18,7 +18,7 @@
 		<br/>
 			{{#each chapter.options}}
 			{{#if hideOption(this, inventory) }}
-			<div><a on-click="gotoChapter(this.goto)" class="btn btn-default btn-block">{{this.text}}</a></div>
+			<div><a on-click="@this.gotoChapter(this.goto)" class="btn btn-default btn-block">{{this.text}}</a></div>
 			{{/if}}
 			{{/each}}
 		{{#if chapter.isWin || chapter.isEnd}}
