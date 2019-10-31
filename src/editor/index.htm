@@ -35,12 +35,12 @@
   <div class="well">
     <div class="row">
       <div class="col-sm-12">
-        <button id="exportButton" on-click="importAdventure()" class="btn btn-sm btn-info">Import Adventure...</button>&nbsp;
-        <button id="exportButton" on-click="exportAdventure()" class="btn btn-sm btn-info">Export Adventure to File</button>&nbsp;
+        <button id="importButton" on-click="@this.importAdventure()" class="btn btn-sm btn-info">Import Adventure...</button>&nbsp;
+        <button id="exportButton" on-click="@this.exportAdventure()" class="btn btn-sm btn-info">Export Adventure to File</button>&nbsp;
         <a class="btn btn-sm btn-primary" href="map.htm" target="mapScreen">Open Map</a>&nbsp;
         <a class="btn btn-sm btn-warning" href="emulator.htm" target="emulatorScreen">Open Emulator</a>&nbsp;
         <a class="btn btn-sm btn-success" href="help.htm" target="helpScreen">Help</a>&nbsp;
-        <button class="btn btn-sm btn-danger" on-click="deleteAdventure()">Delete Entire Adventure..!</button>
+        <button class="btn btn-sm btn-danger" on-click="@this.deleteAdventure()">Delete Entire Adventure..!</button>
       </div>
     </div>
   </div>
@@ -60,7 +60,7 @@
     <div class="well">
     {{#if id > 0 }}
       <div class="pull-right">
-        <button class="btn btn-sm btn-danger" on-click="deleteChapter(adv.chapters, c)">Delete Chapter {{id}} ({{title}})</button>
+        <button class="btn btn-sm btn-danger" on-click="@this.deleteChapter(adv.chapters, c)">Delete Chapter {{id}} ({{title}})</button>
       </div>
     {{/if}}
     <div class="form-horizontal">
@@ -109,7 +109,7 @@
     {{#each options :i}}
     <div class="well">
 
-      <div class="pull-right"><button on-click="deleteChapterOption(options, i)" class="btn btn-warning btn-sm">Delete Option</button></div>
+      <div class="pull-right"><button on-click="@this.deleteChapterOption(options, i)" class="btn btn-warning btn-sm">Delete Option</button></div>
 
       <div class="form-group">
         <label class="col-sm-offset-2 col-sm-2 control-label">Go To Chapter ID</label>
@@ -144,11 +144,11 @@
     {{/each}}
     </div>
 
-    <button class="btn btn-success" on-click="addChapterOption(this)">Add Option to Chapter {{id}} ({{title}})</button>
+    <button class="btn btn-success" on-click="@this.addChapterOption(this)">Add Option to Chapter {{id}} ({{title}})</button>
 
     </div>
     {{/each}}
-    <button class="btn btn-success" on-click="addChapter()">Add New Chapter</button>
+    <button class="btn btn-success" on-click="@this.addChapter()">Add New Chapter</button>
     <a name="end"/>
   </div>
 </script>
