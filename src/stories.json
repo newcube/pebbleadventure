@@ -1,0 +1,14 @@
+{
+"stories": [
+{
+"id": "014493dd-0d9e-456b-9c4b-4e188854240a",
+"title": "Crown Quest",
+"gamefile": "kingsquest"
+},
+{
+"id": "014493dd-0d9e-456b-9c4b-4e188854240b",
+"title": "Space Fleet Cadet",
+"gamefile": "spacecadet"
+}
+]
+}
